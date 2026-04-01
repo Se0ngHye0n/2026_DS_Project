@@ -1,8 +1,6 @@
 # 2025 NESS Statathon  
 ## Insurance Fraud Detection using Feature Engineering
 
-This project focuses on detecting fraudulent insurance claims using tabular data and analyzing the impact of feature engineering on model performance.
-
 ---
 
 ## Objective
@@ -160,4 +158,4 @@ scale_pos_weight = neg / pos
 ---
 
 ## References
-[Kaggle Competition](https://www.kaggle.com/competitions/2025-ness-statathon)
+[Kaggle Competition/2025-ness-statathon](https://www.kaggle.com/competitions/2025-ness-statathon)
