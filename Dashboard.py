@@ -15,25 +15,25 @@ else:
 
 plt.rcParams["axes.unicode_minus"] = False
 
-# 한국어 피처 매핑
-feature_kor_map = {
-    "marital_status": "결혼 여부",
-    "no_verification": "검증 없음",
-    "claim_year": "청구 연도",
-    "address_change_ind": "주소 변경 여부",
-    "witness_present_ind": "목격자 존재 여부",
-    "high_education_ind": "고학력 여부",
-    "accident_parking": "주차 사고 여부",
-    "vehicle_price_per_driver_age": "차량 가격 대비 운전자 나이",
-    "liab_prct_sq": "책임 비율 제곱",
-    "age_over_safety": "안전 대비 나이",
-    "age_of_driver": "운전자 나이",
-    "age_of_driver_sq": "운전자 나이 제곱",
-    "female_x_zip_fraud_rate_oof": "여성 X 지역 사기율",
-    "zip_rate_x_accident_highway": "지역 사고율 X 고속도로 사고",
-    "safety_risk_score": "안전 위험 점수",
-    "base_points": "기본 점수",
-    "total_score": "총점"
+# 영어 피처 매핑
+feature_eng_map = {
+    "marital_status": "Marital Status",
+    "no_verification": "No Verification",
+    "claim_year": "Claim Year",
+    "address_change_ind": "Address Change",
+    "witness_present_ind": "Witness Present",
+    "high_education_ind": "High Education",
+    "accident_parking": "Parking Accident",
+    "vehicle_price_per_driver_age": "Vehicle Price / Driver Age",
+    "liab_prct_sq": "Liability Ratio (Squared)",
+    "age_over_safety": "Age vs Safety",
+    "age_of_driver": "Driver Age",
+    "age_of_driver_sq": "Driver Age (Squared)",
+    "female_x_zip_fraud_rate_oof": "Female x Regional Fraud Rate",
+    "zip_rate_x_accident_highway": "Region Accident x Highway",
+    "safety_risk_score": "Safety Risk Score",
+    "base_points": "Base Points",
+    "total_score": "Total Score"
 }
 
 
@@ -46,7 +46,7 @@ st.set_page_config(
 )
 
 st.title("🚗 Insurance Fraud Scorecard Dashboard")
-st.caption("Claim ID를 입력하거나 선택하면 score gauge와 feature contribution waterfall을 확인할 수 있습니다.")
+st.caption("Claim ID를 입력하거나 선택하면 Score Gauge와 Feature Contribution Waterfall을 확인할 수 있습니다.")
 
 # -------------------------------------------------
 # 데이터 로드
@@ -91,7 +91,7 @@ st.sidebar.header("🔎 Claim 선택")
 
 claim_ids = sorted(score_df["claim_id"].unique().tolist())
 
-search_claim = st.sidebar.text_input("Claim ID 입력", value=claim_ids[0] if claim_ids else "")
+search_claim = st.sidebar.text_input("Claim ID 입력 (0 ~ 17999)", value=claim_ids[0] if claim_ids else "")
 
 if search_claim and search_claim in claim_ids:
     selected_claim = search_claim
@@ -111,7 +111,7 @@ claim_partial = claim_partial[
 
 claim_partial["contribution"] = pd.to_numeric(claim_partial["contribution"], errors="coerce").fillna(0.0)
 
-claim_partial["feature_kor"] = claim_partial["feature"].map(feature_kor_map).fillna(claim_partial["feature"])
+claim_partial["feature_kor"] = claim_partial["feature"].map(feature_eng_map).fillna(claim_partial["feature"])
 
 # score 정보
 score = float(row["score"])
