@@ -5,6 +5,37 @@ from pathlib import Path
 import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge, Circle, Polygon
+import platform
+
+# OS별 폰트 설정
+if platform.system() == "Windows":
+    plt.rcParams["font.family"] = "Malgun Gothic"
+else:
+    plt.rcParams["font.family"] = "DejaVu Sans"  # Streamlit Cloud용
+
+plt.rcParams["axes.unicode_minus"] = False
+
+# 한국어 피처 매핑
+feature_kor_map = {
+    "marital_status": "결혼 여부",
+    "no_verification": "검증 없음",
+    "claim_year": "청구 연도",
+    "address_change_ind": "주소 변경 여부",
+    "witness_present_ind": "목격자 존재 여부",
+    "high_education_ind": "고학력 여부",
+    "accident_parking": "주차 사고 여부",
+    "vehicle_price_per_driver_age": "차량 가격 대비 운전자 나이",
+    "liab_prct_sq": "책임 비율 제곱",
+    "age_over_safety": "안전 대비 나이",
+    "age_of_driver": "운전자 나이",
+    "age_of_driver_sq": "운전자 나이 제곱",
+    "female_x_zip_fraud_rate_oof": "여성 X 지역 사기율",
+    "zip_rate_x_accident_highway": "지역 사고율 X 고속도로 사고",
+    "safety_risk_score": "안전 위험 점수",
+    "base_points": "기본 점수",
+    "total_score": "총점"
+}
+
 
 # -------------------------------------------------
 # 페이지 설정
@@ -79,6 +110,8 @@ claim_partial = claim_partial[
 ].copy()
 
 claim_partial["contribution"] = pd.to_numeric(claim_partial["contribution"], errors="coerce").fillna(0.0)
+
+claim_partial["feature_kor"] = claim_partial["feature"].map(feature_kor_map).fillna(claim_partial["feature"])
 
 # score 정보
 score = float(row["score"])
@@ -238,7 +271,7 @@ def draw_waterfall(df: pd.DataFrame, title: str = "Feature Contribution Waterfal
         cumulative += value
 
     ax.set_yticks(y_positions)
-    ax.set_yticklabels(plot_df["feature"])
+    ax.set_yticklabels(plot_df["feature_kor"])
     ax.set_title(title, fontsize=16, fontweight="bold")
     ax.set_xlabel("Contribution")
     ax.axvline(0, color="black", linewidth=0.8)
